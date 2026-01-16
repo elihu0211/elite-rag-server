@@ -132,6 +132,9 @@ jobs:
         run: uv sync --frozen
 
       - name: Verify imports
+        env:
+          DATABASE_URL: postgresql+asyncpg://test:test@localhost/test
+          JWT_SECRET_KEY: test-secret-key-for-ci
         run: |
           uv run python -c "from src.main import app; print('Import OK')"
           uv run python -c "from src.api.graphql.schema import schema; print('Schema OK')"
