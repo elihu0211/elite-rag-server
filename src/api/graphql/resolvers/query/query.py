@@ -5,6 +5,7 @@ ABP/HotChocolate 對比：
 - HotChocolate 使用 [ExtendObjectType] 擴展 Query
 - Python Strawberry 使用多重繼承組合 Query
 """
+
 import strawberry
 
 from src.api.graphql.resolvers.query.document_query import DocumentQuery

@@ -6,12 +6,13 @@ ABP 對比：
 - ABP 使用 Microsoft.IdentityModel.Tokens
 - Python: 自製輕量 JWT 實作或使用 python-jose
 """
+
 import json
 import base64
 import hmac
 import hashlib
 from datetime import datetime, timedelta, timezone
-from typing import TypedDict
+from typing import Any, TypedDict
 
 from src.config import settings
 
@@ -51,7 +52,9 @@ class JWTHandler:
         payload = {
             **payload,
             "iat": int(now.timestamp()),
-            "exp": int((now + timedelta(minutes=settings.jwt_expire_minutes)).timestamp()),
+            "exp": int(
+                (now + timedelta(minutes=settings.jwt_expire_minutes)).timestamp()
+            ),
         }
 
         header_b64 = cls._base64url_encode(json.dumps(header).encode())

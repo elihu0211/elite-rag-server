@@ -3,7 +3,7 @@ name = "elite-rag-server"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.18.1",
     "asyncpg>=0.29.0",
@@ -22,5 +22,7 @@ openai = ["openai>=1.0.0"]
 
 [dependency-groups]
 dev = [
+    "mypy>=1.19.1",
     "pytest>=9.0.2",
+    "ruff>=0.14.13",
 ]

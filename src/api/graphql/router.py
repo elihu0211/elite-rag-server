@@ -5,6 +5,7 @@ ABP/HotChocolate 對比：
 - HotChocolate: services.AddGraphQLServer().AddQueryType<Query>()
 - Python Strawberry: GraphQLRouter 整合 FastAPI
 """
+
 from typing import Annotated
 
 from fastapi import Depends, Request

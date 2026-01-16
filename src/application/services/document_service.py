@@ -7,6 +7,7 @@ ABP 對比：
 - ABP 使用 ILocalEventBus 發布 DocumentCreatedEvent 等事件
 - Python: 直接呼叫 SearchService 進行向量索引
 """
+
 from uuid import uuid4
 
 from sqlalchemy.ext.asyncio import AsyncSession

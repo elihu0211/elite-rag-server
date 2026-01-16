@@ -6,6 +6,7 @@ ABP 對比：
 - ABP 使用 services.Configure<TOptions>() 註冊配置
 - Python: pydantic-settings 從 .env 讀取，功能類似但更簡潔
 """
+
 from functools import lru_cache
 
 from pydantic import Field
@@ -39,7 +40,11 @@ class Settings(BaseSettings):
     )
 
     # CORS
-    cors_origins: list[str] = ["http://localhost:3000", "http://localhost:5173", "http://localhost:8000"]
+    cors_origins: list[str] = [
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://localhost:8000",
+    ]
 
     # JWT - 敏感配置必須從環境變數讀取
     jwt_secret_key: str = Field(

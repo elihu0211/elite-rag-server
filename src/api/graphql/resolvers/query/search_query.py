@@ -6,6 +6,7 @@ ABP/HotChocolate 對比：
 - HotChocolate 使用 [Authorize] attribute 做權限控制
 - Python Strawberry: permission_classes=[IsAuthenticated]
 """
+
 import strawberry
 from strawberry.types import Info
 

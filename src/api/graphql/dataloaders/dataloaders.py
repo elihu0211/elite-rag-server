@@ -5,6 +5,7 @@ ABP 對比：
 - ABP 沒有直接對應，但概念類似 IRepository 的批次查詢
 - DataLoader 用於解決 N+1 查詢問題
 """
+
 from dataclasses import dataclass
 
 from sqlalchemy.ext.asyncio import AsyncSession

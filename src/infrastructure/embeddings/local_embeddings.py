@@ -6,6 +6,7 @@ ABP 對比：
 - 這是免費的本地嵌入方案，無需 API Key
 - 使用 all-MiniLM-L6-v2 模型，輸出 384 維向量
 """
+
 from functools import lru_cache
 
 from src.infrastructure.embeddings.base import IEmbeddingService
@@ -94,7 +95,9 @@ def get_embedding_service() -> IEmbeddingService:
     - Python: 使用 lru_cache 實現 Singleton
     """
     if settings.embedding_provider == "openai":
-        from src.infrastructure.embeddings.openai_embeddings import OpenAIEmbeddingService
+        from src.infrastructure.embeddings.openai_embeddings import (
+            OpenAIEmbeddingService,
+        )
 
         return OpenAIEmbeddingService()
     return LocalEmbeddingService()

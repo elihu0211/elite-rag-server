@@ -5,6 +5,7 @@ ABP/HotChocolate 對比：
 - HotChocolate 使用 [ExtendObjectType] 擴展 Mutation
 - Python Strawberry 使用多重繼承組合 Mutation
 """
+
 import strawberry
 
 from src.api.graphql.resolvers.mutation.auth_mutation import AuthMutation

@@ -7,6 +7,7 @@ ABP 對比：
 - 實作可能包含 OpenAIEmbeddingService、LocalEmbeddingService
 - 使用 ABP 的 Named Option 或 Factory Pattern 切換實作
 """
+
 from abc import ABC, abstractmethod
 
 

@@ -7,6 +7,7 @@ ABP 對比：
 - ABP 使用 IMapper 做 DTO 轉換
 - Python: 直接組合 EmbeddingService 和 VectorRepository
 """
+
 from src.domain.interfaces.vector_repository import IVectorRepository
 from src.domain.models.search_result import SearchResult, SimilarDocument
 from src.infrastructure.embeddings.base import IEmbeddingService

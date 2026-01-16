@@ -11,6 +11,7 @@ ABP 對比：
 - 此介面定義向量儲存的核心操作
 - 實作層 (Infrastructure) 負責與 PostgreSQL/pgvector 交互
 """
+
 from abc import ABC, abstractmethod
 
 from src.domain.models.search_result import DocumentChunk, SearchResult, SimilarDocument

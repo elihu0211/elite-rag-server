@@ -5,6 +5,7 @@ ABP/HotChocolate 對比：
 - HotChocolate: [ObjectType] 或 record 搭配 [GraphQLType]
 - Python Strawberry: @strawberry.type 裝飾器
 """
+
 import strawberry
 
 

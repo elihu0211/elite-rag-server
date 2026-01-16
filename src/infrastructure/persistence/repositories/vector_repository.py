@@ -6,6 +6,7 @@ ABP 對比：
 - ABP 使用 EF Core 進行 ORM 操作，配合 pgvector 擴展
 - Python: 使用 SQLAlchemy + pgvector.sqlalchemy
 """
+
 import re
 from uuid import uuid4
 
@@ -16,7 +17,9 @@ from src.config import settings
 from src.domain.interfaces.vector_repository import IVectorRepository
 from src.domain.models.search_result import DocumentChunk, SearchResult, SimilarDocument
 from src.infrastructure.embeddings.base import IEmbeddingService
-from src.infrastructure.persistence.models.document_chunk_model import DocumentChunkModel
+from src.infrastructure.persistence.models.document_chunk_model import (
+    DocumentChunkModel,
+)
 from src.infrastructure.persistence.models.document_model import DocumentModel
 
 

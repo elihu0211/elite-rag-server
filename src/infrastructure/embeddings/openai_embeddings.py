@@ -9,6 +9,7 @@ ABP 對比：
 注意：此為可選功能，需要安裝 openai 套件
 uv add openai
 """
+
 from src.infrastructure.embeddings.base import IEmbeddingService
 from src.config import settings
 
