@@ -1,0 +1,83 @@
+# Deploy Workflow - 部署到 Azure App Service
+# 觸發：Push 到 main 分支
+
+name: Deploy to Azure
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # 允許手動觸發
+
+env:
+  PYTHON_VERSION: "3.12"
+  AZURE_WEBAPP_NAME: "elite-rag-server"  # 修改為你的 App Service 名稱
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    # 使用 production 環境（可設定審批流程）
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.webapp-url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Create virtual environment and install dependencies
+        run: |
+          uv venv
+          uv sync --frozen
+
+      - name: Verify build
+        run: |
+          uv run python -c "from src.main import app; print('Build OK')"
+
+      # Azure 登入 - 使用 OIDC (推薦) 或 Service Principal
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # 部署到 Azure App Service
+      - name: Deploy to Azure Web App
+        id: deploy
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          # 如果使用 slot 部署：
+          # slot-name: staging
+
+      # 設定 App Service 環境變數
+      - name: Configure App Settings
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-settings-json: |
+            [
+              { "name": "DATABASE_URL", "value": "${{ secrets.DATABASE_URL }}" },
+              { "name": "JWT_SECRET_KEY", "value": "${{ secrets.JWT_SECRET_KEY }}" },
+              { "name": "DEBUG", "value": "false" },
+              { "name": "EMBEDDING_PROVIDER", "value": "${{ vars.EMBEDDING_PROVIDER || 'local' }}" },
+              { "name": "OPENAI_API_KEY", "value": "${{ secrets.OPENAI_API_KEY }}" },
+              { "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "true" },
+              { "name": "PYTHON_VERSION", "value": "${{ env.PYTHON_VERSION }}" }
+            ]
+
+      - name: Logout from Azure
+        run: az logout
+        if: always()

@@ -1,0 +1,74 @@
+# Deploy Staging Workflow - 部署到 Staging 環境
+# 觸發：Push 到 develop 分支
+
+name: Deploy to Staging
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: "3.12"
+  AZURE_WEBAPP_NAME: "elite-rag-server-staging"  # Staging App Service 名稱
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy to Staging
+    runs-on: ubuntu-latest
+
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.webapp-url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Create virtual environment and install dependencies
+        run: |
+          uv venv
+          uv sync --frozen
+
+      - name: Verify build
+        run: |
+          uv run python -c "from src.main import app; print('Build OK')"
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy to Azure Web App (Staging)
+        id: deploy
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+
+      - name: Configure App Settings
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-settings-json: |
+            [
+              { "name": "DATABASE_URL", "value": "${{ secrets.STAGING_DATABASE_URL }}" },
+              { "name": "JWT_SECRET_KEY", "value": "${{ secrets.JWT_SECRET_KEY }}" },
+              { "name": "DEBUG", "value": "true" },
+              { "name": "EMBEDDING_PROVIDER", "value": "local" }
+            ]
+
+      - name: Logout from Azure
+        run: az logout
+        if: always()
