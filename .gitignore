@@ -86,7 +86,8 @@ dmypy.json
 *.h5
 *.pkl
 *.pickle
-models/
+/models/
+data/models/
 
 # Sentence Transformers cache
 .cache/
